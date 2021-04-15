@@ -7,7 +7,7 @@
 # Multiple Clients can have their individual Packets relayed to the arbitrary remote host.
 # host replies to a specific client is re-routed back to that specific client
 
-import sys, socket, select, time
+import sys, socket, select, time, math
 
 # Whether or not to print the IP address and port of each packet received
 debug=True
@@ -39,6 +39,7 @@ except:
 inputConns = [mainS]
 connectedClients = [] 
 lastPingReceived = []
+activityStart = []
 
 #list of connected clients: 
 knownServer = (remoteHost, remotePort)
@@ -56,6 +57,7 @@ while True:
 				print("New Client connected: "+ str(client_address))
 				connectedClients.append(client_address)
 				lastPingReceived.append(time.time())
+				activityStart.append(time.time())
 				#create a new outgoing socket for the new client
 				try:
 					newClientS = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -90,8 +92,10 @@ while True:
 
 	#cleaning up timed out connections
 	for delIDs in timedOutIDs:
-		if debug:
+		if True:
 			print("\tCleaning up "+str(connectedClients[delIDs]) +" for inactivity ")
+			activityLength = math.floor((time.time()-activityStart[delIDs])/3600)
+			print("\tActive for "+str(activityLength)+" minutes")
 		inputConns[delIDs+1].close()
 		del inputConns[delIDs+1]
 		del connectedClients[delIDs]
