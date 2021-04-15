@@ -63,7 +63,7 @@ while True:
 					newClientS = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 					newClientS.bind(('',0))#bind to any port
 					inputConns.append(newClientS)
-					print("\tCreated new Socket Connection for client "+newClientS.getsockname()[1])
+					print("\tCreated new Socket Connection for client "+str(newClientS.getsockname()[1]))
 				except:
 					fail('Couldnt create connection for new client '+str(client_address))
 			
@@ -93,11 +93,11 @@ while True:
 	#cleaning up timed out connections
 	for delIDs in timedOutIDs:
 		if True:
-			print("\tCleaning up "+str(connectedClients[delIDs]) +" for inactivity ")
+			print("\tCleaning up "+str(connectedClients[delIDs]) +" for inactivity on outgoing Port"+str(inputConns[delIDs+1].getsockname()[1]) )
 			activityLength = math.floor((time.time()-activityStart[delIDs])/60)
 			print("\tActive for "+str(activityLength)+" minutes")
 		inputConns[delIDs+1].close()
 		del inputConns[delIDs+1]
 		del connectedClients[delIDs]
-		del lastPingReceived[delIDs]
 		del activityStart[delIDs]
+		del lastPingReceived[delIDs]
