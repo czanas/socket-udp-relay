@@ -63,7 +63,7 @@ while True:
 					newClientS = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 					newClientS.bind(('',0))#bind to any port
 					inputConns.append(newClientS)
-					print("\tCreated new Socket Connection for client")
+					print("\tCreated new Socket Connection for client "+newClientS.getsockname()[1])
 				except:
 					fail('Couldnt create connection for new client '+str(client_address))
 			
