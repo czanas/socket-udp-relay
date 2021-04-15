@@ -10,7 +10,7 @@
 import sys, socket, select, time, math
 
 # Whether or not to print the IP address and port of each packet received
-debug=True
+debug=False
 
 def fail(reason):
 	sys.stderr.write(reason + '\n')
@@ -94,9 +94,10 @@ while True:
 	for delIDs in timedOutIDs:
 		if True:
 			print("\tCleaning up "+str(connectedClients[delIDs]) +" for inactivity ")
-			activityLength = math.floor((time.time()-activityStart[delIDs])/3600)
+			activityLength = math.floor((time.time()-activityStart[delIDs])/60)
 			print("\tActive for "+str(activityLength)+" minutes")
 		inputConns[delIDs+1].close()
 		del inputConns[delIDs+1]
 		del connectedClients[delIDs]
 		del lastPingReceived[delIDs]
+		del activityStart[delIDs]
